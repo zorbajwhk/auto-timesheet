@@ -20,7 +20,7 @@ A Chrome extension that automates filling in work schedules on TeamSpirit timesh
 
 ## Usage
 
-1. Navigate to your TeamSpirit Work Time page:
+1. Navigate to your TeamSpirit Work Time page on any `force.com` domain.
 2. Click the extension icon in your Chrome toolbar
 3. Click "Start Automation" to begin filling in your timesheet
 4. The extension will process each weekday row automatically

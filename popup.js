@@ -1,9 +1,6 @@
 // This script runs in the extension's popup.
 // It uses chrome.tabs.sendMessage to communicate with the content script.
 
-// The target URL for the automation
-const TARGET_URL = 'https://teamspirit-609.lightning.force.com/lightning/n/teamspirit__AtkWorkTimeTab';
-
 /**
  * Sends a message to the content script to start the automation.
  */
@@ -42,7 +39,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrongPageMessage = document.getElementById('wrongPageMessage');
         const appBody = document.getElementById('appBody');
 
-        if (currentTab && currentTab.url.startsWith(TARGET_URL)) {
+        let isForcePage = false;
+        if (currentTab && currentTab.url) {
+            try {
+                const url = new URL(currentTab.url);
+                // This is more flexible than a hardcoded URL and matches host_permissions.
+                if (url.protocol === 'https:' && url.hostname.endsWith('.force.com')) {
+                    isForcePage = true;
+                }
+            } catch (e) {
+                // Invalid URL (e.g., chrome://), so it's not a force.com page.
+                isForcePage = false;
+            }
+        }
+
+        if (isForcePage) {
             appBody.classList.remove('hidden');
             wrongPageMessage.classList.add('hidden');
             
