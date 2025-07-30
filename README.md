@@ -1,4 +1,4 @@
-# TeamSpirit Timesheet Automator
+# TeamSpirit by SalesForce Timesheet Automator
 
 A Chrome extension that automates filling in work schedules on TeamSpirit timesheet pages.
 
