@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamSpirit Automator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            width: 250px;
+            padding: 15px;
+            text-align: center;
+            background-color: #f0f2f5;
+        }
+        h1 {
+            font-size: 16px;
+            color: #1c1e21;
+            margin-top: 0;
+        }
+        p {
+            font-size: 13px;
+            color: #606770;
+        }
+        #startButton {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        #startButton:hover {
+            background-color: #166fe5;
+        }
+        #startButton:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+        .hidden {
+            display: none;
+        }
+        a {
+            color: #1877f2;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Timesheet Automator</h1>
+
+    <div id="wrongPageMessage" class="hidden">
+        <p>Please navigate to your TeamSpirit Work Time page to use this extension.</p>
+        <a href="https://teamspirit-609.lightning.force.com/lightning/n/teamspirit__AtkWorkTimeTab" target="_blank">Go to TeamSpirit</a>
+    </div>
+
+    <div id="appBody" class="hidden">
+        <p>Click the button below to fill in all workdays for this month.</p>
+        <button id="startButton">Start Automation</button>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
