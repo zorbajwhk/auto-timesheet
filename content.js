@@ -108,8 +108,8 @@ async function runAutomationLogic(doc, sendResponse) {
             console.log("DEBUG: Confirmation OK button not found. Proceeding anyway.");
         }
 
-        // --- Wait 5 seconds before the next loop ---
-        console.log("DEBUG: Waiting 5 seconds before next row...");
+        // --- Wait 8 seconds before the next loop ---
+        console.log("DEBUG: Waiting 8 seconds before next row...");
         await sleep(8000);
     }
 
