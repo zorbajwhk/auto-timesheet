@@ -1,13 +1,3 @@
-/*
- * This is a simplified version of the automation script.
- *
- * It is injected into all frames and waits for a message from the popup.
- * When a message is received, it checks if it is in the correct frame
- * by looking for the timesheet table, then runs the automation.
- *
- * UPDATE: Re-added logic to select the work location from the dropdown.
- */
-
 // --- Configuration ---
 const START_TIME = '11:00';
 const END_TIME = '20:00';
@@ -28,9 +18,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
  * @param {function} sendResponse - The function to send a response back to the popup.
  */
 async function runAutomationLogic(doc, sendResponse) {
-    console.log("DEBUG: runAutomationLogic() called.");
     if (isProcessing) {
-        console.log("DEBUG: Automation is already in progress. Exiting.");
         sendResponse({ status: "Already running" });
         return;
     }
@@ -47,26 +35,20 @@ async function runAutomationLogic(doc, sendResponse) {
         return;
     }
 
-    console.log(`DEBUG: Found ${dayRows.length} weekdays to process.`);
     let processedCount = 0;
 
     for (const row of dayRows) {
-        console.log(`DEBUG: --- Processing row: ${row.id} ---`);
         const startTimeCell = row.querySelector('td.vst');
         
         // Skip rows that are already filled out
         if (!startTimeCell || startTimeCell.textContent.trim() !== '') {
-            console.log(`DEBUG: Skipping row ${row.id} because it's already filled or invalid.`);
             continue;
         }
 
         processedCount++;
-        
-        console.log(`DEBUG: Clicking start time cell for row ${row.id}.`);
         startTimeCell.click();
         await sleep(2000);
 
-        console.log("DEBUG: Searching for popup form elements...");
         const startTimeInput = doc.getElementById('startTime');
         const endTimeInput = doc.getElementById('endTime');
         const workLocationSelect = doc.getElementById('workLocationId'); // Find the dropdown
@@ -81,9 +63,7 @@ async function runAutomationLogic(doc, sendResponse) {
             await sleep(2000);
             continue;
         }
-        console.log("DEBUG: Successfully found required popup form elements.");
 
-        console.log("DEBUG: Filling form values...");
         startTimeInput.value = START_TIME;
         endTimeInput.value = END_TIME;
         workLocationSelect.value = WORK_LOCATION_VALUE; // Set the dropdown value
@@ -94,22 +74,16 @@ async function runAutomationLogic(doc, sendResponse) {
         workLocationSelect.dispatchEvent(new Event('change', { bubbles: true })); // Dispatch change event for the dropdown
         await sleep(1000);
 
-        console.log("DEBUG: Clicking submit button.");
         submitButton.click();
-        console.log(`DEBUG: Submitted for row: ${row.id}`);
         await sleep(1000); // Wait a moment for the confirmation alert to appear
 
         // --- Handle the confirmation "OK" button ---
         const confirmOkButton = doc.getElementById('confirmAlertOk');
         if (confirmOkButton) {
-            console.log("DEBUG: Found confirmation OK button. Clicking it.");
             confirmOkButton.click();
-        } else {
-            console.log("DEBUG: Confirmation OK button not found. Proceeding anyway.");
         }
 
         // --- Wait 8 seconds before the next loop ---
-        console.log("DEBUG: Waiting 8 seconds before next row...");
         await sleep(8000);
     }
 
@@ -128,7 +102,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "startAutomation") {
         // Check if this instance of the script is in the correct frame by looking for the table.
         if (document.getElementById('mainTableBody')) {
-            console.log("DEBUG: Message received and table found. Starting automation.");
             runAutomationLogic(document, sendResponse);
         } else {
             // Do nothing if the table isn't here. Another instance of the script (in the iframe) will handle it.
